@@ -12,6 +12,11 @@ extension String {
         NSLocalizedString(self, comment: "")
     }
 
+    func localized(with parameters: String...) -> String {
+        let localizedString = NSLocalizedString(self, comment: "")
+        return String(format: localizedString, arguments: parameters)
+    }
+
     func buildSOAPEnvelope() -> String {
         return """
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">

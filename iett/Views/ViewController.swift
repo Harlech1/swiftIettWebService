@@ -20,7 +20,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     let stationTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Durak ismi giriniz: "
+        textField.placeholder = "enterStation".localized()
         textField.layer.cornerRadius = 8
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
@@ -37,7 +37,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     let showAllStationsButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Tüm Duraklar", for: .normal)
+        button.setTitle("allStations".localized(), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.systemBlue
         button.layer.cornerRadius = 8
@@ -46,7 +46,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     let showOneStationButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Bir Durak", for: .normal)
+        button.setTitle("oneStation".localized(), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.systemBlue
         button.layer.cornerRadius = 8
@@ -112,6 +112,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.tabBarController?.tabBar.items?[0].title = "map".localized()
+        self.tabBarController?.tabBar.items?[1].title = "test".localized()
 
         addSubviews()
 
@@ -219,14 +222,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
                         self.busCoordinates = CLLocationCoordinate2D(latitude: Double(latitude)!, longitude: Double(longitude)!)
                         self.stationCoordinates = CLLocationCoordinate2D(latitude: 40.9150550436188, longitude: 29.1496060429753)
+                        /// Tugay Yolu Caddesi coordinates
 
                         let info = """
-                        Enlem:   \(obj["Enlem"] ?? "-")
-                        Boylam:   \(obj["Boylam"] ?? "-")
-                        Anlık Hız:   \(obj["Hiz"] ?? "-")
-                        Son Güncelleme:   \(obj["Saat"] ?? "-")
-                        Kapı Numarası: \(obj["KapiNo"] ?? "-")
-                        Plaka: \(obj["Plaka"] ?? "-")
+                        \("latitude".localized()): \(obj["Enlem"] ?? "-")
+                        \("longitude".localized()): \(obj["Boylam"] ?? "-")
+                        \("instSpeed".localized()): \(obj["Hiz"] ?? "-")
+                        \("lastUpdate".localized()): \(obj["Saat"] ?? "-")
+                        \("doorNo".localized()): \(obj["KapiNo"] ?? "-")
+                        \("plate".localized()): \(obj["Plaka"] ?? "-")
+                        \("difference".localized()): \(MapManager.shared.calculateDistanceBetweenCoordinates(coord1: self.busCoordinates, coord2: self.stationCoordinates)) km
                         """
 
                         self.responselabel.text = info
@@ -259,10 +264,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     func showAlert(_ hatKodu: String) {
-        let alertController = UIAlertController(title: "Hat Kodu Hatalı", message: "\(hatKodu) hat kodunda bir otobüs yok.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "routeNumberWrong".localized(), message: "noRoute".localized(with: hatKodu), preferredStyle: .alert)
 
-        let okAction = UIAlertAction(title: "OK", style: .default) { (_) in
-            print("OK button tapped")
+        let okAction = UIAlertAction(title: "ok".localized(), style: .default) { (_) in
             self.urlTextField.text = ""
         }
         alertController.addAction(okAction)
@@ -277,19 +281,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
          }*/
     }
 
-    @objc func sendNotification(fark: Double) {
+    @objc func sendNotification(difference: Double) {
         let content = UNMutableNotificationContent()
-        content.title = "Otobüsünüz geliyor"
-        content.body = "Otobüsünüzün varmasına \(fark)km"
+        content.title = "busComing".localized()
+        content.body = "kilometersUntilArrive".localized(with: String(difference))
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let uuid = UUID().uuidString
         let request = UNNotificationRequest(identifier: uuid, content: content, trigger: trigger)
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                print("Bildirim oluşturulamadı: \(error.localizedDescription)")
+                print("Couldn't create notification, error: \(error.localizedDescription)")
             } else {
-                print("Bildirim başarıyla oluşturuldu")
+                print("Notification successfully created.")
             }
         }
     }

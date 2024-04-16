@@ -13,9 +13,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if granted {
-                print("Kullanıcı bildirim iznini verdi.")
+                print("User gave permissions to send notifications")
             } else {
-                print("Kullanıcı bildirim iznini vermedi.")
+                print("User didn't give permissions to send notifications")
             }
         }
         UIApplication.shared.applicationIconBadgeNumber = 0

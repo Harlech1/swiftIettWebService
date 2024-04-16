@@ -18,11 +18,11 @@ class MapManager {
         
         let annotation = MKPointAnnotation()
         annotation.coordinate = busCoordinates
-        annotation.title = "Otobüs"
+        annotation.title = "bus".localized()
 
         let annotation1 = MKPointAnnotation()
-        annotation1.coordinate = busCoordinates
-        annotation1.title = "Durak"
+        annotation1.coordinate = stationCoordinates
+        annotation1.title = "station".localized()
 
         mapView.addAnnotation(annotation)
         mapView.addAnnotation(annotation1)
