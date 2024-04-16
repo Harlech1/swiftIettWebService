@@ -258,8 +258,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
 
-    func showAlert(_ idk: String) {
-        let alertController = UIAlertController(title: "Hat Kodu Hatalı", message: "\(idk) hat kodunda bir otobüs yok.", preferredStyle: .alert)
+    func showAlert(_ hatKodu: String) {
+        let alertController = UIAlertController(title: "Hat Kodu Hatalı", message: "\(hatKodu) hat kodunda bir otobüs yok.", preferredStyle: .alert)
 
         let okAction = UIAlertAction(title: "OK", style: .default) { (_) in
             print("OK button tapped")
